@@ -1,0 +1,58 @@
+# EditorConfig helps developers define and maintain consistent
+# coding styles between different editors and IDEs
+# editorconfig.org
+
+root = true
+
+# Default settings for all files
+[*]
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+
+# Java source files
+[*.java]
+indent_size = 4
+max_line_length = 120
+continuation_indent_size = 8
+
+# XML files (pom.xml, Maven configurations)
+[*.xml]
+indent_size = 4
+
+# Properties files
+[*.properties]
+indent_size = 4
+
+# YAML files (GitHub Actions, Docker Compose, etc.)
+[*.{yml,yaml}]
+indent_size = 2
+
+# JSON files
+[*.json]
+indent_size = 2
+
+# Markdown files
+[*.md]
+max_line_length = 120
+# Double whitespace at end of line denotes a line break in Markdown
+trim_trailing_whitespace = false
+
+# Shell scripts
+[*.{sh,bash,fish}]
+indent_size = 2
+
+# Dockerfile
+[Dockerfile*]
+indent_size = 4
+
+# Makefile (requires tabs)
+[Makefile]
+indent_style = tab
+
+# Git configuration
+[.gitignore]
+indent_size = 2
