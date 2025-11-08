@@ -1,0 +1,41 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDE
+.idea
+.vscode
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings
+
+# Build outputs
+target/
+dependency-reduced-pom.xml
+
+# Documentation
+*.md
+!README.md
+
+# Optimize directory
+optimize/
+
+# Scripts
+scripts/
+
+# macOS
+.DS_Store
+
+# Testing
+.env
+.env.local
+*.log
+
+# Other
+*.swp
+*.bak
+*~
