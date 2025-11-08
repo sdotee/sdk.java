@@ -1,46 +1,26 @@
 package s.ee.urlshorten.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.*;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@JsonSerialize
-@Getter
-@Setter
-public class ShortenResponse {
-    @JsonProperty("code")
-    private int code;
-
-    @JsonProperty("data")
-    private Data data;
-
-    @JsonProperty("message")
-    private String message;
-
-    // Convenience method to get the short URL directly
+/**
+ * Response from URL shortening operations.
+ */
+public record ShortenResponse(
+    @JsonProperty("code") int code,
+    @JsonProperty("data") Data data,
+    @JsonProperty("message") String message
+) {
     public String getShortUrl() {
-        return data != null ? data.getShortUrl() : null;
+        return data != null ? data.shortUrl() : null;
     }
 
     public String getSlug() {
-        return data != null ? data.getSlug() : null;
+        return data != null ? data.slug() : null;
     }
 
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Getter
-    @Setter
-    public static class Data {
-        @JsonProperty("custom_slug")
-        private String customSlug;
-
-        @JsonProperty("short_url")
-        private String shortUrl;
-
-        @JsonProperty("slug")
-        private String slug;
-    }
+    public record Data(
+        @JsonProperty("custom_slug") String customSlug,
+        @JsonProperty("short_url") String shortUrl,
+        @JsonProperty("slug") String slug
+    ) {}
 }

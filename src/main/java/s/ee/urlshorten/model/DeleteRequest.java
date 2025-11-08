@@ -1,23 +1,23 @@
 package s.ee.urlshorten.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Builder
-@JsonSerialize
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class DeleteRequest {
-    @JsonProperty("domain")
-    private String domain;
-
-    @JsonProperty("slug")
-    private String slug;
+/**
+ * Request object for deleting a shortened URL.
+ * This record only contains required fields, so no factory methods are needed.
+ */
+public record DeleteRequest(
+    @JsonProperty("domain") String domain,
+    @JsonProperty("slug") String slug
+) {
+    /**
+     * Creates a new delete request.
+     *
+     * @param domain the domain of the shortened URL
+     * @param slug the slug of the shortened URL
+     * @return a new DeleteRequest instance
+     */
+    public static DeleteRequest of(String domain, String slug) {
+        return new DeleteRequest(domain, slug);
+    }
 }

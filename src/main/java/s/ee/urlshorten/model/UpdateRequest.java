@@ -1,29 +1,45 @@
 package s.ee.urlshorten.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Builder
-@JsonSerialize
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class UpdateRequest {
-    @JsonProperty("domain")
-    private String domain;
+/**
+ * Request object for updating a shortened URL.
+ * Use factory methods to create instances with only required fields.
+ */
+public record UpdateRequest(
+        @JsonProperty("domain") String domain,
+        @JsonProperty("slug") String slug,
+        @JsonProperty("target_url") String targetUrl,
+        @JsonProperty("title") String title
+) {
+    /**
+     * Creates a request with required fields only.
+     *
+     * @param domain the domain of the shortened URL
+     * @param slug the slug of the shortened URL
+     * @return a new UpdateRequest instance
+     */
+    public static UpdateRequest of(String domain, String slug) {
+        return new UpdateRequest(domain, slug, null, null);
+    }
 
-    @JsonProperty("slug")
-    private String slug;
+    /**
+     * Creates a copy with target URL.
+     *
+     * @param targetUrl the new target URL
+     * @return a new UpdateRequest instance
+     */
+    public UpdateRequest withTargetUrl(String targetUrl) {
+        return new UpdateRequest(domain, slug, targetUrl, title);
+    }
 
-    @JsonProperty("target_url")
-    private String targetUrl;
-
-    @JsonProperty("title")
-    private String title;
+    /**
+     * Creates a copy with title.
+     *
+     * @param title the new title
+     * @return a new UpdateRequest instance
+     */
+    public UpdateRequest withTitle(String title) {
+        return new UpdateRequest(domain, slug, targetUrl, title);
+    }
 }
