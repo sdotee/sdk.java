@@ -1,0 +1,71 @@
+#!#
+# Copyright (c) 2025 Hangzhou Guanwaii Technology Co., Ltd.
+#
+# This source code is licensed under the MIT License,
+# which is located in the LICENSE file in the source tree's root directory.
+#
+# File: maven.yaml
+# Author: mingcheng <mingcheng@apache.org>
+# File Created: 2025-11-08 14:56:53
+#
+# Modified By: mingcheng <mingcheng@apache.org>
+# Last Modified: 2025-11-08 15:06:19
+##
+
+# This workflow will build a Java project with Maven, run tests, and upload artifacts
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+name: Java CI with Maven
+
+on:
+  push:
+    branches: ["main"]
+    tags:
+      - "v*.*.*"
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "corretto"
+          cache: maven
+
+      - name: Build with Maven
+        run: mvn -B clean package --file pom.xml
+
+      - name: Run tests
+        run: mvn -B test --file pom.xml
+
+      - name: Upload JAR artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: see-java-sdk-jars
+          path: |
+            target/see-java-sdk-*.jar
+            target/see-cli.jar
+          retention-days: 30
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            target/see-java-sdk-*.jar
+            target/see-cli.jar
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
