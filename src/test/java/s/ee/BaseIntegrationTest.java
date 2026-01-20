@@ -9,7 +9,7 @@
  * File Created: 2025-11-08 10:04:00
  *
  * Modified By: S.EE Development Team <dev@s.ee>
- * Last Modified: 2026-01-20 12:03:23
+ * Last Modified: 2026-01-20 12:21:51
  */
 
 package s.ee;
@@ -49,7 +49,7 @@ public abstract class BaseIntegrationTest {
      * @throws IllegalStateException if API key is not configured
      */
     protected static String getApiKey() {
-        String apiKey = getConfigValue("SEE_API_KEY", null);
+        String apiKey = getConfigValue("SEE_API_KEY", "");
         if (apiKey == null || apiKey.isBlank()) {
             throw new IllegalStateException(
                     "API key not configured. Set SEE_API_KEY environment variable or system property."
@@ -65,7 +65,7 @@ public abstract class BaseIntegrationTest {
      * @return the test domain
      */
     protected static String getTestDomain() {
-        return getConfigValue("SEE_TEST_DOMAIN", "s.ee");
+        return getConfigValue("SEE_TEST_DOMAIN", "fs.to");
     }
 
     /**
