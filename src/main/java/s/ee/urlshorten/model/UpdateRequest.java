@@ -24,7 +24,7 @@ public record UpdateRequest(
     }
 
     /**
-     * Creates a copy with target URL.
+     * Creates a copy with updated target URL.
      *
      * @param targetUrl the new target URL
      * @return a new UpdateRequest instance
@@ -34,7 +34,7 @@ public record UpdateRequest(
     }
 
     /**
-     * Creates a copy with title.
+     * Creates a copy with updated title.
      *
      * @param title the new title
      * @return a new UpdateRequest instance

@@ -2,11 +2,13 @@ package s.ee;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import s.ee.urlshorten.exception.ShortenException;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -46,6 +48,20 @@ public abstract class Client {
 
     protected <T, R> R post(String endpoint, T requestBody, Class<R> responseType) throws SeeException {
         return executeWithBody("POST", endpoint, requestBody, responseType);
+    }
+
+    protected <R> R postMultipart(String endpoint, File file, Class<R> responseType) throws SeeException {
+        var body = new MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("file", file.getName(),
+                RequestBody.create(file, MediaType.parse("application/octet-stream")))
+            .build();
+
+        var request = buildRequest(endpoint)
+            .post(body)
+            .build();
+
+        return executeRequest(request, responseType);
     }
 
     protected <T, R> R put(String endpoint, T requestBody, Class<R> responseType) throws SeeException {

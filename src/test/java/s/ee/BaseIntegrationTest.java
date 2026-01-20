@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2025-2026 S.EE Development Team,. Ltd
+ *
+ * This source code is licensed under the MIT License,
+ * which is located in the LICENSE file in the source tree's root directory.
+ *
+ * File: BaseIntegrationTest.java
+ * Author: S.EE Development Team <dev@s.ee>
+ * File Created: 2025-11-08 10:04:00
+ *
+ * Modified By: S.EE Development Team <dev@s.ee>
+ * Last Modified: 2026-01-20 12:03:23
+ */
+
 package s.ee;
 
 /**
@@ -5,9 +19,9 @@ package s.ee;
  *
  * <p>Configuration can be provided via environment variables or system properties:
  * <ul>
- *   <li>SEE_API_BASE_URL: API base URL (default: https://api.see-test.com/api)</li>
+ *   <li>SEE_API_BASE_URL: API base URL (default: https://s.ee/api/v1)</li>
  *   <li>SEE_API_KEY: API authentication key (required for tests to run)</li>
- *   <li>SEE_TEST_DOMAIN: Domain for shortened URLs (default: a.see-test.com)</li>
+ *   <li>SEE_TEST_DOMAIN: Domain for shortened URLs (default: s.ee)</li>
  *   <li>SEE_TEST_TIMEOUT: Request timeout in seconds (default: 10)</li>
  * </ul>
  *
@@ -24,7 +38,7 @@ public abstract class BaseIntegrationTest {
      * @return the API base URL
      */
     protected static String getApiBaseUrl() {
-        return getConfigValue("SEE_API_BASE_URL", "https://api.see-test.com/api");
+        return getConfigValue("SEE_API_BASE_URL", "https://s.ee/api/v1");
     }
 
     /**
@@ -51,7 +65,7 @@ public abstract class BaseIntegrationTest {
      * @return the test domain
      */
     protected static String getTestDomain() {
-        return getConfigValue("SEE_TEST_DOMAIN", "a.see-test.com");
+        return getConfigValue("SEE_TEST_DOMAIN", "s.ee");
     }
 
     /**

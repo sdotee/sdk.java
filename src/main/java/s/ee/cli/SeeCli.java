@@ -1,28 +1,44 @@
+/**
+ * Copyright (c) 2025-2026 S.EE Development Team,. Ltd
+ *
+ * This source code is licensed under the MIT License,
+ * which is located in the LICENSE file in the source tree's root directory.
+ *
+ * File: SeeCli.java
+ * Author: S.EE Development Team <dev@s.ee>
+ * File Created: 2025-12-05 16:08:46
+ *
+ * Modified By: S.EE Development Team <dev@s.ee>
+ * Last Modified: 2026-01-20 12:01:09
+ */
+
 package s.ee.cli;
 
 import s.ee.SeeException;
 import s.ee.domain.DomainClient;
-import s.ee.domain.config.DomainConfig;
+import s.ee.file.FileClient;
+import s.ee.Config;
 import s.ee.tag.TagClient;
-import s.ee.tag.config.TagConfig;
+import s.ee.text.TextClient;
+import s.ee.text.model.TextCreateRequest;
 import s.ee.urlshorten.ShortenClient;
-import s.ee.urlshorten.config.ShortenConfig;
 import s.ee.urlshorten.model.DeleteRequest;
 import s.ee.urlshorten.model.ShortenRequest;
 import s.ee.urlshorten.model.UpdateRequest;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
 /**
  * Command-line interface for SEE API operations.
- * Provides simple commands for URL shortening, domain, and tag management.
+ * Provides simple commands for URL shortening, file uploads, text sharing, domain, and tag management.
  *
  * <p>This class uses Java 17 features including records, pattern matching,
  * and enhanced switch expressions for cleaner, more maintainable code.</p>
  */
 public class SeeCli {
-    private static final String DEFAULT_BASE_URL = "https://s.ee/api";
+    private static final String DEFAULT_BASE_URL = "https://s.ee/api/v1";
     private static final int DEFAULT_TIMEOUT = 10;
 
     private final String apiKey;
@@ -80,6 +96,8 @@ public class SeeCli {
                 case "update" -> new UpdateCommand();
                 case "domains" -> new ListCommand("domains");
                 case "tags" -> new ListCommand("tags");
+                case "upload" -> new UploadCommand();
+                case "text" -> new TextCommand();
                 default -> {
                     System.err.println("Error: Unknown command '" + commandName + "'");
                     printUsage();
@@ -120,6 +138,12 @@ public class SeeCli {
         System.out.println("  tags");
         System.out.println("      List available tags");
         System.out.println();
+        System.out.println("  upload <file-path>");
+        System.out.println("      Upload a file");
+        System.out.println();
+        System.out.println("  text <title> <content>");
+        System.out.println("      Create text sharing");
+        System.out.println();
         System.out.println("Environment variables:");
         System.out.println("  SEE_API_KEY - API key for authentication (required)");
     }
@@ -130,7 +154,7 @@ public class SeeCli {
      * @return configured ShortenClient instance
      */
     private ShortenClient createShortenClient() {
-        return new ShortenClient(new ShortenConfig(baseUrl, apiKey, timeout));
+        return new ShortenClient(new Config(baseUrl, apiKey, timeout));
     }
 
     /**
@@ -205,7 +229,7 @@ public class SeeCli {
      */
     public boolean updateShortUrl(String domain, String slug, String targetUrl) throws SeeException {
         return createShortenClient()
-                .update(UpdateRequest.of(domain, slug).withTargetUrl(targetUrl))
+                .update(UpdateRequest.of(domain, slug).withTargetUrl(targetUrl).withTitle("Updated Link"))
                 .code() == 200;
     }
 
@@ -217,7 +241,7 @@ public class SeeCli {
      */
     public List<String> listDomains() throws SeeException {
         return Arrays.asList(
-                new DomainClient(new DomainConfig(baseUrl, apiKey, timeout))
+                new DomainClient(new Config(baseUrl, apiKey, timeout))
                         .get()
                         .getDomains()
         );
@@ -231,7 +255,7 @@ public class SeeCli {
      */
     public List<String> listTags() throws SeeException {
         return Arrays.stream(
-                        new TagClient(new TagConfig(baseUrl, apiKey, timeout))
+                        new TagClient(new Config(baseUrl, apiKey, timeout))
                                 .get()
                                 .getTags()
                 )
@@ -239,10 +263,20 @@ public class SeeCli {
                 .toList();
     }
 
+    public String uploadFile(File file) throws SeeException {
+        var client = new FileClient(new Config(baseUrl, apiKey, timeout));
+        return client.upload(file).getUrl();
+    }
+
+    public String createText(String title, String content) throws SeeException {
+        var client = new TextClient(new Config(baseUrl, apiKey, timeout));
+        return client.create(new TextCreateRequest(content, title)).getShortUrl();
+    }
+
     /**
      * Command execution record for cleaner main method implementation.
      */
-    private sealed interface Command permits ShortenCommand, DeleteCommand, UpdateCommand, ListCommand {
+    private sealed interface Command permits ShortenCommand, DeleteCommand, UpdateCommand, ListCommand, UploadCommand, TextCommand {
         void execute(SeeCli cli, String[] args) throws SeeException;
 
         int requiredArgs();
@@ -326,6 +360,42 @@ public class SeeCli {
         @Override
         public String errorMessage() {
             return "";
+        }
+    }
+
+    private record UploadCommand() implements Command {
+        @Override
+        public void execute(SeeCli cli, String[] args) throws SeeException {
+            var response = cli.uploadFile(new File(args[1]));
+            System.out.println("Upload successful: " + response);
+        }
+
+        @Override
+        public int requiredArgs() {
+            return 2;
+        }
+
+        @Override
+        public String errorMessage() {
+            return "upload requires file path";
+        }
+    }
+
+    private record TextCommand() implements Command {
+        @Override
+        public void execute(SeeCli cli, String[] args) throws SeeException {
+            var response = cli.createText(args[1], args[2]);
+            System.out.println("Text created: " + response);
+        }
+
+        @Override
+        public int requiredArgs() {
+            return 3;
+        }
+
+        @Override
+        public String errorMessage() {
+            return "text requires title and content";
         }
     }
 }

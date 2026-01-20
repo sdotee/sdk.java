@@ -1,10 +1,24 @@
+/**
+ * Copyright (c) 2025-2026 S.EE Development Team,. Ltd
+ *
+ * This source code is licensed under the MIT License,
+ * which is located in the LICENSE file in the source tree's root directory.
+ *
+ * File: ShortenClientTest.java
+ * Author: S.EE Development Team <dev@s.ee>
+ * File Created: 2025-11-08 09:59:52
+ *
+ * Modified By: S.EE Development Team <dev@s.ee>
+ * Last Modified: 2026-01-20 12:02:47
+ */
+
 package s.ee.urlshorten;
 
 import org.junit.jupiter.api.*;
 import s.ee.BaseIntegrationTest;
 import s.ee.Client;
+import s.ee.Config;
 import s.ee.SeeException;
-import s.ee.urlshorten.config.ShortenConfig;
 import s.ee.urlshorten.model.DeleteRequest;
 import s.ee.urlshorten.model.ShortenRequest;
 import s.ee.urlshorten.model.UpdateRequest;
@@ -15,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Integration tests for the URL shortening service.
- * 
+ *
  * @see BaseIntegrationTest for configuration options
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -33,7 +47,7 @@ class ShortenClientTest extends BaseIntegrationTest {
     static void setUpAll() {
         // Initialize client with configuration from environment/system properties
         shortenClient = new ShortenClient(
-            new ShortenConfig(getApiBaseUrl(), getApiKey(), getTimeout())
+            new Config(getApiBaseUrl(), getApiKey(), getTimeout())
         );
     }
 
@@ -158,7 +172,7 @@ class ShortenClientTest extends BaseIntegrationTest {
     void testInvalidApiKey() {
         // Arrange - create client with intentionally invalid API key
         var invalidClient = new ShortenClient(
-            new ShortenConfig(getApiBaseUrl(), "invalid-key", getTimeout())
+            new Config(getApiBaseUrl(), "invalid-key", getTimeout())
         );
 
         var request = ShortenRequest.of(getTestDomain(), TEST_TARGET_URL);

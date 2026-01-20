@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
 
     <name>SEE Java SDK</name>
-    <description>Java SDK and CLI tool for SEE URL shortening service</description>
+    <description>Java SDK and CLI tool for SEE content sharing service (Text, File, URL)</description>
 
     <properties>
         <!-- Java Version -->
@@ -18,16 +18,16 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.release>${java.version}</maven.compiler.release>
-        
+
         <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        
+
         <!-- Dependency Versions -->
         <okhttp.version>4.12.0</okhttp.version>
         <jackson.version>2.16.0</jackson.version>
         <junit.version>5.9.2</junit.version>
-        
+
         <!-- Plugin Versions -->
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
         <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
@@ -61,7 +61,7 @@
 
     <build>
         <finalName>${project.artifactId}-${project.version}</finalName>
-        
+
         <plugins>
             <!-- Compiler Plugin -->
             <plugin>

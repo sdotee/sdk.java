@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2025-2026 S.EE Development Team,. Ltd
+ *
+ * This source code is licensed under the MIT License,
+ * which is located in the LICENSE file in the source tree's root directory.
+ *
+ * File: SeeCliTest.java
+ * Author: S.EE Development Team <dev@s.ee>
+ * File Created: 2025-11-08 12:03:11
+ *
+ * Modified By: S.EE Development Team <dev@s.ee>
+ * Last Modified: 2026-01-20 12:02:32
+ */
+
 package s.ee.cli;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -103,8 +117,8 @@ class SeeCliTest {
         var cli = new SeeCli(apiKey);
         assertDoesNotThrow(() -> {
             String shortUrl = cli.shortenWithTitleAndTags(
-                TEST_DOMAIN, 
-                TEST_TARGET_URL, 
+                TEST_DOMAIN,
+                TEST_TARGET_URL,
                 "Test Title",
                 List.of(1, 2)
             );

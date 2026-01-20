@@ -22,7 +22,7 @@ FROM amazoncorretto:17-alpine
 
 # Set metadata
 LABEL maintainer="SEE SDK Team"
-LABEL description="SEE Java SDK CLI - URL shortening service command-line tool"
+LABEL description="SEE Java SDK CLI - content sharing service command-line tool"
 LABEL version="1.0.0"
 
 # Install required packages
