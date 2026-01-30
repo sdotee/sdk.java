@@ -1,4 +1,4 @@
-package s.ee.urlshorten.model;
+package s.ee.url.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -8,7 +8,7 @@ import java.util.List;
  * Request object for creating a shortened URL.
  * Use factory methods to create instances with only required fields.
  */
-public record ShortenRequest(
+public record CreateRequest(
     @JsonProperty("custom_slug") String customSlug,
     @JsonProperty("domain") String domain,
     @JsonProperty("expiration_redirect_url") String expirationRedirectUrl,
@@ -25,8 +25,8 @@ public record ShortenRequest(
      * @param targetUrl the target URL to shorten
      * @return a new ShortenRequest instance
      */
-    public static ShortenRequest of(String domain, String targetUrl) {
-        return new ShortenRequest(null, domain, null, null, null, null, targetUrl, null);
+    public static CreateRequest of(String domain, String targetUrl) {
+        return new CreateRequest(null, domain, null, null, null, null, targetUrl, null);
     }
 
     /**
@@ -35,8 +35,8 @@ public record ShortenRequest(
      * @param customSlug the custom slug
      * @return a new ShortenRequest instance
      */
-    public ShortenRequest withCustomSlug(String customSlug) {
-        return new ShortenRequest(customSlug, domain, expirationRedirectUrl, expireAt, password, tagIds, targetUrl, title);
+    public CreateRequest withCustomSlug(String customSlug) {
+        return new CreateRequest(customSlug, domain, expirationRedirectUrl, expireAt, password, tagIds, targetUrl, title);
     }
 
     /**
@@ -45,8 +45,8 @@ public record ShortenRequest(
      * @param title the title
      * @return a new ShortenRequest instance
      */
-    public ShortenRequest withTitle(String title) {
-        return new ShortenRequest(customSlug, domain, expirationRedirectUrl, expireAt, password, tagIds, targetUrl, title);
+    public CreateRequest withTitle(String title) {
+        return new CreateRequest(customSlug, domain, expirationRedirectUrl, expireAt, password, tagIds, targetUrl, title);
     }
 
     /**
@@ -55,8 +55,8 @@ public record ShortenRequest(
      * @param expirationRedirectUrl the expiration redirect URL
      * @return a new ShortenRequest instance
      */
-    public ShortenRequest withExpirationRedirectUrl(String expirationRedirectUrl) {
-        return new ShortenRequest(customSlug, domain, expirationRedirectUrl, expireAt, password, tagIds, targetUrl, title);
+    public CreateRequest withExpirationRedirectUrl(String expirationRedirectUrl) {
+        return new CreateRequest(customSlug, domain, expirationRedirectUrl, expireAt, password, tagIds, targetUrl, title);
     }
 
     /**
@@ -65,8 +65,8 @@ public record ShortenRequest(
      * @param expireAt the expiration timestamp
      * @return a new ShortenRequest instance
      */
-    public ShortenRequest withExpireAt(Long expireAt) {
-        return new ShortenRequest(customSlug, domain, expirationRedirectUrl, expireAt, password, tagIds, targetUrl, title);
+    public CreateRequest withExpireAt(Long expireAt) {
+        return new CreateRequest(customSlug, domain, expirationRedirectUrl, expireAt, password, tagIds, targetUrl, title);
     }
 
     /**
@@ -75,8 +75,8 @@ public record ShortenRequest(
      * @param password the password
      * @return a new ShortenRequest instance
      */
-    public ShortenRequest withPassword(String password) {
-        return new ShortenRequest(customSlug, domain, expirationRedirectUrl, expireAt, password, tagIds, targetUrl, title);
+    public CreateRequest withPassword(String password) {
+        return new CreateRequest(customSlug, domain, expirationRedirectUrl, expireAt, password, tagIds, targetUrl, title);
     }
 
     /**
@@ -85,7 +85,7 @@ public record ShortenRequest(
      * @param tagIds the tag IDs
      * @return a new ShortenRequest instance
      */
-    public ShortenRequest withTagIds(List<Integer> tagIds) {
-        return new ShortenRequest(customSlug, domain, expirationRedirectUrl, expireAt, password, tagIds, targetUrl, title);
+    public CreateRequest withTagIds(List<Integer> tagIds) {
+        return new CreateRequest(customSlug, domain, expirationRedirectUrl, expireAt, password, tagIds, targetUrl, title);
     }
 }

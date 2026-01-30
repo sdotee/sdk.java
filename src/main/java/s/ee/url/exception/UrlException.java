@@ -12,28 +12,28 @@
  * Last Modified: 2026-01-20 12:01:43
  */
 
-package s.ee.urlshorten.exception;
+package s.ee.url.exception;
 
-import s.ee.Response;
-import s.ee.SeeException;
+import s.ee.common.Response;
+import s.ee.common.SeeException;
 
 /**
  * Exception thrown when URL shortening operations fail.
  */
-public class ShortenException extends SeeException {
+public class UrlException extends SeeException {
     private final Response response;
 
-    public ShortenException(String message) {
+    public UrlException(String message) {
         super(message);
         this.response = Response.builder().message(message).build();
     }
 
-    public ShortenException(Response errorResponse) {
+    public UrlException(Response errorResponse) {
         super(errorResponse.toString());
         this.response = errorResponse;
     }
 
-    public ShortenException(String message, Throwable cause) {
+    public UrlException(String message, Throwable cause) {
         super(message, cause);
         this.response = Response.builder().message(message).build();
     }

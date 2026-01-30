@@ -14,6 +14,8 @@
 
 package s.ee;
 
+import s.ee.common.Config;
+
 /**
  * Base class for integration tests providing common configuration utilities.
  *

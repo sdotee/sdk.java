@@ -12,7 +12,7 @@
  * Last Modified: 2026-01-20 12:02:21
  */
 
-package s.ee.model;
+package s.ee.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

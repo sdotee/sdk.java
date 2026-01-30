@@ -16,11 +16,10 @@ package s.ee.text;
 
 import org.junit.jupiter.api.*;
 import s.ee.BaseIntegrationTest;
-import s.ee.Config;
-import s.ee.SeeException;
-import s.ee.text.model.TextCreateRequest;
-import s.ee.model.DeleteRequest;
-import s.ee.text.model.TextUpdateRequest;
+import s.ee.common.SeeException;
+import s.ee.text.model.CreateRequest;
+import s.ee.text.model.DeleteRequest;
+import s.ee.text.model.UpdateRequest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,7 +43,7 @@ class TextClientTest extends BaseIntegrationTest {
             return;
         }
 
-        var request = new TextCreateRequest("Hello Text World", "Test Title");
+        var request = new CreateRequest("Hello Text World", "Test Title");
         var response = client.create(request);
 
         assertNotNull(response);
@@ -69,7 +68,7 @@ class TextClientTest extends BaseIntegrationTest {
             return;
         }
 
-        var request = new TextUpdateRequest("Updated Content", domain, slug, "Updated Title");
+        var request = new UpdateRequest("Updated Content", domain, slug, "Updated Title");
         var response = client.update(request);
 
         assertNotNull(response);

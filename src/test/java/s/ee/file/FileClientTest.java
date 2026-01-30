@@ -16,8 +16,7 @@ package s.ee.file;
 
 import org.junit.jupiter.api.*;
 import s.ee.BaseIntegrationTest;
-import s.ee.Config;
-import s.ee.SeeException;
+import s.ee.common.SeeException;
 import s.ee.file.model.FileResponse;
 
 import java.io.File;

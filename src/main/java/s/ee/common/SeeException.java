@@ -12,7 +12,7 @@
  * Last Modified: 2026-01-20 12:01:35
  */
 
-package s.ee;
+package s.ee.common;
 
 import java.io.IOException;
 

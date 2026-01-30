@@ -12,22 +12,19 @@
  * Last Modified: 2026-01-20 12:01:28
  */
 
-package s.ee;
+package s.ee.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Standard API response structure.
  *
- * @param code response code
- * @param data response data
+ * @param code    response code
+ * @param data    response data
  * @param message response message
  */
-public record Response(
-        @JsonProperty("code") int code,
-        @JsonProperty("data") String data,
-        @JsonProperty("message") String message
-) {
+public record Response(@JsonProperty("code") int code, @JsonProperty("data") String data,
+                       @JsonProperty("message") String message) {
     public static ResponseBuilder builder() {
         return new ResponseBuilder();
     }

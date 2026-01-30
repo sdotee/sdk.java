@@ -1,4 +1,4 @@
-package s.ee;
+package s.ee.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.MediaType;
@@ -6,7 +6,6 @@ import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import s.ee.urlshorten.exception.ShortenException;
 
 import java.io.File;
 import java.io.IOException;

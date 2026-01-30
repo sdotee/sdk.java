@@ -1,8 +1,9 @@
 package s.ee.tag;
 
-import s.ee.Client;
-import s.ee.Config;
-import s.ee.SeeException;
+import s.ee.common.Client;
+import s.ee.common.Config;
+import s.ee.common.DomainResponse;
+import s.ee.common.SeeException;
 import s.ee.tag.model.TagResponse;
 
 /**
@@ -22,5 +23,9 @@ public class TagClient extends Client {
      */
     public TagResponse get() throws SeeException {
         return get("/tags", null, TagResponse.class);
+    }
+
+    public DomainResponse getDomains() throws SeeException {
+        return get("/tags/domains", null, DomainResponse.class);
     }
 }

@@ -1,27 +1,27 @@
 /**
  * Copyright (c) 2025-2026 S.EE Development Team,. Ltd
- *
+ * <p>
  * This source code is licensed under the MIT License,
  * which is located in the LICENSE file in the source tree's root directory.
- *
+ * <p>
  * File: ShortenClientTest.java
  * Author: S.EE Development Team <dev@s.ee>
  * File Created: 2025-11-08 09:59:52
- *
+ * <p>
  * Modified By: S.EE Development Team <dev@s.ee>
  * Last Modified: 2026-01-20 12:02:47
  */
 
-package s.ee.urlshorten;
+package s.ee.url;
 
 import org.junit.jupiter.api.*;
 import s.ee.BaseIntegrationTest;
-import s.ee.Client;
-import s.ee.Config;
-import s.ee.SeeException;
-import s.ee.model.DeleteRequest;
-import s.ee.urlshorten.model.ShortenRequest;
-import s.ee.urlshorten.model.UpdateRequest;
+import s.ee.common.Client;
+import s.ee.common.Config;
+import s.ee.common.SeeException;
+import s.ee.url.model.CreateRequest;
+import s.ee.url.model.DeleteRequest;
+import s.ee.url.model.UpdateRequest;
 
 import java.util.Date;
 
@@ -33,20 +33,20 @@ import static org.junit.jupiter.api.Assertions.*;
  * @see BaseIntegrationTest for configuration options
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class ShortenClientTest extends BaseIntegrationTest {
+class UrlClientTest extends BaseIntegrationTest {
 
     // Test data constants
     private static final String TEST_TARGET_URL = "https://www.example.com/404";
     private static final String UPDATED_TARGET_URL = "http://www.example.com/updated";
 
     // Shared test state
-    private static ShortenClient shortenClient;
+    private static UrlClient shortenClient;
     private static String testSlug;
 
     @BeforeAll
     static void setUpAll() {
         // Initialize client with configuration from environment/system properties
-        shortenClient = new ShortenClient(createConfig());
+        shortenClient = new UrlClient(createConfig());
     }
 
     @Test
@@ -54,7 +54,7 @@ class ShortenClientTest extends BaseIntegrationTest {
     @DisplayName("Test creating a shortened URL")
     void testCreateShortenedUrl() throws SeeException {
         // Arrange
-        var request = ShortenRequest.of(getTestDomain(), TEST_TARGET_URL);
+        var request = CreateRequest.of(getTestDomain(), TEST_TARGET_URL);
 
         // Act
         var response = shortenClient.create(request);
@@ -80,9 +80,7 @@ class ShortenClientTest extends BaseIntegrationTest {
         // Arrange
         assertNotNull(testSlug, "Test slug should be set by create test");
 
-        var request = UpdateRequest.of(getTestDomain(), testSlug)
-                .withTargetUrl(UPDATED_TARGET_URL)
-                .withTitle("Hello, world! from " + new Date());
+        var request = UpdateRequest.of(getTestDomain(), testSlug).withTargetUrl(UPDATED_TARGET_URL).withTitle("Hello, world! from " + new Date());
 
         // Act
         var response = shortenClient.update(request);
@@ -121,8 +119,7 @@ class ShortenClientTest extends BaseIntegrationTest {
     void testCreateWithCustomSlug() throws SeeException {
         // Arrange
         String customSlug = "test-custom-" + System.currentTimeMillis();
-        var request = ShortenRequest.of(getTestDomain(), TEST_TARGET_URL)
-                .withCustomSlug(customSlug);
+        var request = CreateRequest.of(getTestDomain(), TEST_TARGET_URL).withCustomSlug(customSlug);
 
         // Act
         var response = shortenClient.create(request);
@@ -146,8 +143,7 @@ class ShortenClientTest extends BaseIntegrationTest {
     void testCreateWithTitle() throws SeeException {
         // Arrange
         String title = "Test Title " + new Date();
-        var request = ShortenRequest.of(getTestDomain(), TEST_TARGET_URL)
-                .withTitle(title);
+        var request = CreateRequest.of(getTestDomain(), TEST_TARGET_URL).withTitle(title);
 
         // Act
         var response = shortenClient.create(request);
@@ -169,11 +165,9 @@ class ShortenClientTest extends BaseIntegrationTest {
     @DisplayName("Test error handling for invalid API key")
     void testInvalidApiKey() {
         // Arrange - create client with intentionally invalid API key
-        var invalidClient = new ShortenClient(
-            new Config(getApiBaseUrl(), "invalid-key", getTimeout())
-        );
+        var invalidClient = new UrlClient(new Config(getApiBaseUrl(), "invalid-key", getTimeout()));
 
-        var request = ShortenRequest.of(getTestDomain(), TEST_TARGET_URL);
+        var request = CreateRequest.of(getTestDomain(), TEST_TARGET_URL);
 
         // Act & Assert
         assertThrows(SeeException.class, () -> invalidClient.create(request), "Should throw SeeException for invalid API key");

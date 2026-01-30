@@ -14,10 +14,10 @@
 
 package s.ee.file;
 
-import s.ee.Client;
-import s.ee.Config;
-import s.ee.SeeException;
-import s.ee.model.DomainResponse;
+import s.ee.common.Client;
+import s.ee.common.Config;
+import s.ee.common.SeeException;
+import s.ee.common.DomainResponse;
 import s.ee.file.model.DeleteResponse;
 import s.ee.file.model.FileResponse;
 

@@ -1,13 +1,13 @@
 package s.ee.examples;
 
-import s.ee.Config;
-import s.ee.SeeException;
-import s.ee.model.DeleteRequest;
-import s.ee.model.DomainResponse;
+import s.ee.common.Config;
+import s.ee.common.SeeException;
+import s.ee.text.model.DeleteRequest;
+import s.ee.common.DomainResponse;
 import s.ee.text.TextClient;
-import s.ee.text.model.TextCreateRequest;
-import s.ee.text.model.TextResponse;
-import s.ee.text.model.TextUpdateRequest;
+import s.ee.text.model.CreateRequest;
+import s.ee.text.model.Response;
+import s.ee.text.model.UpdateRequest;
 
 /**
  * Example for Text operations.
@@ -34,8 +34,8 @@ public class TextExample {
 
             // 2. Create text sharing
             System.out.println("\nCreating text sharing...");
-            TextCreateRequest createRequest = new TextCreateRequest("Hello, World!", "My First Text");
-            TextResponse response = client.create(createRequest);
+            CreateRequest createRequest = new CreateRequest("Hello, World!", "My First Text");
+            Response response = client.create(createRequest);
 
             System.out.println("Text created: " + response.getShortUrl());
             System.out.println("Slug: " + response.getSlug());
@@ -44,7 +44,7 @@ public class TextExample {
             System.out.println("\nUpdating text sharing...");
             // Start from valid request, assuming proper builder or constructor usage
             // The generated TextUpdateRequest might need fields
-            TextUpdateRequest updateRequest = new TextUpdateRequest(
+            UpdateRequest updateRequest = new UpdateRequest(
                 "Updated content",
                 "s.ee",
                 response.getSlug(),

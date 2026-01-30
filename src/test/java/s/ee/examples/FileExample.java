@@ -1,10 +1,10 @@
 package s.ee.examples;
 
-import s.ee.Config;
-import s.ee.SeeException;
+import s.ee.common.Config;
+import s.ee.common.SeeException;
 import s.ee.file.FileClient;
 import s.ee.file.model.FileResponse;
-import s.ee.model.DomainResponse;
+import s.ee.common.DomainResponse;
 
 import java.io.File;
 import java.io.FileWriter;
