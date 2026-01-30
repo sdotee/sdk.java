@@ -35,9 +35,7 @@ class DomainClientTest extends BaseIntegrationTest {
     @BeforeAll
     static void setUpAll() {
         // Initialize client with configuration from environment/system properties
-        domainClient = new DomainClient(
-            new Config(getApiBaseUrl(), getApiKey(), getTimeout())
-        );
+        domainClient = new DomainClient(createConfig());
     }
 
     @Test

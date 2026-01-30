@@ -19,7 +19,7 @@ import s.ee.BaseIntegrationTest;
 import s.ee.Config;
 import s.ee.SeeException;
 import s.ee.text.model.TextCreateRequest;
-import s.ee.urlshorten.model.DeleteRequest;
+import s.ee.model.DeleteRequest;
 import s.ee.text.model.TextUpdateRequest;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,7 +33,7 @@ class TextClientTest extends BaseIntegrationTest {
 
     @BeforeAll
     static void setUp() {
-        client = new TextClient(new Config(getApiBaseUrl(), getApiKey(), getTimeout()));
+        client = new TextClient(createConfig());
     }
 
     @Test

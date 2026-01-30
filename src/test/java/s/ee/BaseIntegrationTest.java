@@ -84,6 +84,15 @@ public abstract class BaseIntegrationTest {
     }
 
     /**
+     * Creates a configuration object from environment/system properties.
+     *
+     * @return the configuration object
+     */
+    protected static Config createConfig() {
+        return new Config(getApiBaseUrl(), getApiKey(), getTimeout());
+    }
+
+    /**
      * Retrieves a configuration value from environment variable or system property.
      * Environment variables take precedence over system properties.
      *

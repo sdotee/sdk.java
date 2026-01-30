@@ -36,9 +36,7 @@ class TagClientTest extends BaseIntegrationTest {
     @BeforeEach
     void setUp() {
         // Initialize client with configuration from environment/system properties
-        tagClient = new TagClient(
-            new Config(getApiBaseUrl(), getApiKey(), getTimeout())
-        );
+        tagClient = new TagClient(createConfig());
     }
 
     @Test

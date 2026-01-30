@@ -4,9 +4,9 @@ import s.ee.Client;
 import s.ee.Config;
 import s.ee.Response;
 import s.ee.SeeException;
-import s.ee.domain.model.DomainResponse;
+import s.ee.model.DomainResponse;
 import s.ee.text.model.*;
-import s.ee.urlshorten.model.DeleteRequest;
+import s.ee.model.DeleteRequest;
 
 /**
  * Client for Text operations.

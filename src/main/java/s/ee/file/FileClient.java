@@ -17,7 +17,7 @@ package s.ee.file;
 import s.ee.Client;
 import s.ee.Config;
 import s.ee.SeeException;
-import s.ee.domain.model.DomainResponse;
+import s.ee.model.DomainResponse;
 import s.ee.file.model.DeleteResponse;
 import s.ee.file.model.FileResponse;
 

@@ -17,7 +17,7 @@ package s.ee.domain;
 import s.ee.Client;
 import s.ee.Config;
 import s.ee.SeeException;
-import s.ee.domain.model.DomainResponse;
+import s.ee.model.DomainResponse;
 
 /**
  * Client for domain operations.

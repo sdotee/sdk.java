@@ -5,7 +5,7 @@ import s.ee.Config;
 import s.ee.Response;
 import s.ee.SeeException;
 import s.ee.urlshorten.exception.ShortenException;
-import s.ee.urlshorten.model.DeleteRequest;
+import s.ee.model.DeleteRequest;
 import s.ee.urlshorten.model.ShortenRequest;
 import s.ee.urlshorten.model.ShortenResponse;
 import s.ee.urlshorten.model.UpdateRequest;

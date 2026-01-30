@@ -36,7 +36,7 @@ class FileClientTest extends BaseIntegrationTest {
 
     @BeforeAll
     static void setUp() throws IOException {
-        client = new FileClient(new Config(getApiBaseUrl(), getApiKey(), getTimeout()));
+        client = new FileClient(createConfig());
 
         // Create a temporary test file
         testFile = File.createTempFile("test-upload", ".txt");

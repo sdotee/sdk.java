@@ -22,7 +22,7 @@ import s.ee.tag.TagClient;
 import s.ee.text.TextClient;
 import s.ee.text.model.TextCreateRequest;
 import s.ee.urlshorten.ShortenClient;
-import s.ee.urlshorten.model.DeleteRequest;
+import s.ee.model.DeleteRequest;
 import s.ee.urlshorten.model.ShortenRequest;
 import s.ee.urlshorten.model.UpdateRequest;
 

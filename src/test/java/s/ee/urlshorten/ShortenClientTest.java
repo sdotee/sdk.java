@@ -19,7 +19,7 @@ import s.ee.BaseIntegrationTest;
 import s.ee.Client;
 import s.ee.Config;
 import s.ee.SeeException;
-import s.ee.urlshorten.model.DeleteRequest;
+import s.ee.model.DeleteRequest;
 import s.ee.urlshorten.model.ShortenRequest;
 import s.ee.urlshorten.model.UpdateRequest;
 
@@ -46,9 +46,7 @@ class ShortenClientTest extends BaseIntegrationTest {
     @BeforeAll
     static void setUpAll() {
         // Initialize client with configuration from environment/system properties
-        shortenClient = new ShortenClient(
-            new Config(getApiBaseUrl(), getApiKey(), getTimeout())
-        );
+        shortenClient = new ShortenClient(createConfig());
     }
 
     @Test
