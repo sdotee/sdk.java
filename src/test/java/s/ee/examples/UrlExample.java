@@ -39,7 +39,7 @@ public class UrlExample {
             // 2. Update the shortened URL
             System.out.println("\nUpdating shortened URL...");
             UpdateRequest updateRequest = UpdateRequest.of("s.ee", response.getSlug())
-                    .withTitle("Updated Example URL");
+                    .withTitle("Updated Example URL").withTargetUrl("https://example.com/updated");
 
             client.update(updateRequest);
             System.out.println("URL updated successfully");

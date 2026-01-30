@@ -142,6 +142,8 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
+                    <forkCount>1</forkCount>
+                    <threadCount>1</threadCount>
                     <includes>
                         <include>**/*Test.java</include>
                     </includes>

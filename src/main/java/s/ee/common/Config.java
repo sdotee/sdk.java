@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2025-2026 S.EE Development Team,. Ltd
- *
+ * <p>
  * This source code is licensed under the MIT License,
  * which is located in the LICENSE file in the source tree's root directory.
- *
+ * <p>
  * File: Config.java
  * Author: S.EE Development Team <dev@s.ee>
  * File Created: 2025-12-05 16:08:46
- *
+ * <p>
  * Modified By: S.EE Development Team <dev@s.ee>
  * Last Modified: 2026-01-20 12:01:25
  */
@@ -18,7 +18,7 @@ package s.ee.common;
  * Configuration for SEE API client.
  *
  * @param baseUrl API base URL
- * @param apiKey API authentication key
+ * @param apiKey  API authentication key
  * @param timeout request timeout in seconds
  */
 public record Config(String baseUrl, String apiKey, int timeout) {
@@ -37,6 +37,11 @@ public record Config(String baseUrl, String apiKey, int timeout) {
         private String baseUrl;
         private String apiKey;
         private int timeout;
+
+        public ConfigBuilder() {
+            this.baseUrl = DEFAULT_BASE_URL;
+            this.timeout = DEFAULT_TIMEOUT_SECONDS;
+        }
 
         public ConfigBuilder baseUrl(String baseUrl) {
             this.baseUrl = baseUrl;

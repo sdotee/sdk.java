@@ -1,11 +1,8 @@
 package s.ee.common;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
+import okhttp3.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,9 +28,9 @@ public abstract class Client {
     public Client(Config config) {
         this.config = config;
         this.httpClient = new OkHttpClient.Builder()
-            .connectTimeout(config.timeout(), TimeUnit.SECONDS)
-            .readTimeout(config.timeout(), TimeUnit.SECONDS)
-            .build();
+                .connectTimeout(config.timeout(), TimeUnit.SECONDS)
+                .readTimeout(config.timeout(), TimeUnit.SECONDS)
+                .build();
         this.objectMapper = new ObjectMapper();
     }
 
@@ -51,14 +48,14 @@ public abstract class Client {
 
     protected <R> R postMultipart(String endpoint, File file, Class<R> responseType) throws SeeException {
         var body = new MultipartBody.Builder()
-            .setType(MultipartBody.FORM)
-            .addFormDataPart("file", file.getName(),
-                RequestBody.create(file, MediaType.parse("application/octet-stream")))
-            .build();
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("file", file.getName(),
+                        RequestBody.create(file, MediaType.parse("application/octet-stream")))
+                .build();
 
         var request = buildRequest(endpoint)
-            .post(body)
-            .build();
+                .post(body)
+                .build();
 
         return executeRequest(request, responseType);
     }
@@ -82,8 +79,8 @@ public abstract class Client {
 
     private Request.Builder buildRequest(String endpoint) {
         return new Request.Builder()
-            .url(getBaseUrl() + endpoint)
-            .addHeader("Authorization", getApiKey());
+                .url(getBaseUrl() + endpoint)
+                .addHeader("Authorization", getApiKey());
     }
 
     private <T, R> R executeWithBody(String method, String endpoint, T requestBody, Class<R> responseType) throws SeeException {
@@ -121,7 +118,13 @@ public abstract class Client {
             }
 
             var body = responseBody.string();
+            if (body == null || body.isEmpty()) {
+                throw new SeeException("Response body is empty");
+            }
+
             return objectMapper.readValue(body, responseType);
+        } catch (JsonParseException e) {
+            throw new SeeException("Failed to parse JSON response", e);
         } catch (IOException e) {
             throw new SeeException("Failed to execute request or parse response", e);
         }

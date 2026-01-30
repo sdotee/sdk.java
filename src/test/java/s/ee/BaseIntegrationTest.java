@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2025-2026 S.EE Development Team,. Ltd
- *
+ * <p>
  * This source code is licensed under the MIT License,
  * which is located in the LICENSE file in the source tree's root directory.
- *
+ * <p>
  * File: BaseIntegrationTest.java
  * Author: S.EE Development Team <dev@s.ee>
  * File Created: 2025-11-08 10:04:00
- *
+ * <p>
  * Modified By: S.EE Development Team <dev@s.ee>
  * Last Modified: 2026-01-20 12:21:51
  */
@@ -53,9 +53,7 @@ public abstract class BaseIntegrationTest {
     protected static String getApiKey() {
         String apiKey = getConfigValue("SEE_API_KEY", "");
         if (apiKey == null || apiKey.isBlank()) {
-            throw new IllegalStateException(
-                    "API key not configured. Set SEE_API_KEY environment variable or system property."
-            );
+            throw new IllegalStateException("API key not configured. Set SEE_API_KEY environment variable or system property.");
         }
         return apiKey;
     }
@@ -81,7 +79,7 @@ public abstract class BaseIntegrationTest {
         try {
             return Integer.parseInt(timeout);
         } catch (NumberFormatException e) {
-            return 10;
+            return Config.DEFAULT_TIMEOUT_SECONDS;
         }
     }
 

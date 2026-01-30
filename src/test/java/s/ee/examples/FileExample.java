@@ -1,10 +1,10 @@
 package s.ee.examples;
 
 import s.ee.common.Config;
+import s.ee.common.DomainResponse;
 import s.ee.common.SeeException;
 import s.ee.file.FileClient;
 import s.ee.file.model.FileResponse;
-import s.ee.common.DomainResponse;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -22,13 +22,15 @@ public class FileExample {
             return;
         }
 
-        Config config = new Config("https://s.ee/api/v1", apiKey, 30);
-        FileClient client = new FileClient(config);
+        // Initialize FileClient
+        FileClient client = new FileClient(Config.builder().apiKey(apiKey).build());
 
         try {
             // 1. Get available domains
             System.out.println("Fetching available domains...");
             DomainResponse domains = client.getDomains();
+
+            assert domains != null && domains.getDomains().length > 0;
             for (String domain : domains.getDomains()) {
                 System.out.println("- " + domain);
             }
@@ -59,7 +61,8 @@ public class FileExample {
     private static File createTempFile() throws IOException {
         File temp = File.createTempFile("see-example-", ".txt");
         try (FileWriter writer = new FileWriter(temp)) {
-            writer.write("Hello from SEE Java SDK File Example!");
+            writer.write("Hello from SEE Java SDK File Example!\n" + "with Timestamp: " + System.currentTimeMillis());
+            writer.flush();
         }
         return temp;
     }

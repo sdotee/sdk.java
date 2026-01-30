@@ -1,11 +1,11 @@
 package s.ee.examples;
 
 import s.ee.common.Config;
-import s.ee.common.SeeException;
-import s.ee.text.model.DeleteRequest;
 import s.ee.common.DomainResponse;
+import s.ee.common.SeeException;
 import s.ee.text.TextClient;
 import s.ee.text.model.CreateRequest;
+import s.ee.text.model.DeleteRequest;
 import s.ee.text.model.Response;
 import s.ee.text.model.UpdateRequest;
 
@@ -32,9 +32,12 @@ public class TextExample {
                 System.out.println("- " + domain);
             }
 
+            assert domains.getDomains().length != 0;
+            var defaultDomain = domains.getDomains()[0];
+
             // 2. Create text sharing
             System.out.println("\nCreating text sharing...");
-            CreateRequest createRequest = new CreateRequest("Hello, World!", "My First Text");
+            var createRequest = CreateRequest.of("Hello, World!", "My First Text").withDomain(defaultDomain);
             Response response = client.create(createRequest);
 
             System.out.println("Text created: " + response.getShortUrl());
@@ -44,18 +47,13 @@ public class TextExample {
             System.out.println("\nUpdating text sharing...");
             // Start from valid request, assuming proper builder or constructor usage
             // The generated TextUpdateRequest might need fields
-            UpdateRequest updateRequest = new UpdateRequest(
-                "Updated content",
-                "s.ee",
-                response.getSlug(),
-                 "Updated Title"
-            );
+            var updateRequest = UpdateRequest.of(defaultDomain, response.getSlug(), "Updated content", "Updated Title");
             client.update(updateRequest);
             System.out.println("Text updated successfully");
 
             // 4. Delete text sharing
             System.out.println("\nDeleting text sharing...");
-            client.delete(DeleteRequest.of("s.ee", response.getSlug()));
+            client.delete(DeleteRequest.of(defaultDomain, response.getSlug()));
             System.out.println("Text deleted successfully");
 
         } catch (SeeException e) {

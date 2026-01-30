@@ -9,7 +9,7 @@
  * File Created: 2025-12-05 16:08:46
  * <p>
  * Modified By: S.EE Development Team <dev@s.ee>
- * Last Modified: 2026-01-20 12:01:28
+ * Last Modified: 2026-01-30 18:46:50
  */
 
 package s.ee.common;
@@ -25,6 +25,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public record Response(@JsonProperty("code") int code, @JsonProperty("data") String data,
                        @JsonProperty("message") String message) {
+
+    public Response {
+        if (data == null) {
+            data = "";
+        }
+
+        if (message == null) {
+            message = "";
+        }
+    }
+
     public static ResponseBuilder builder() {
         return new ResponseBuilder();
     }
@@ -33,6 +44,12 @@ public record Response(@JsonProperty("code") int code, @JsonProperty("data") Str
         private int code;
         private String data;
         private String message;
+
+        public ResponseBuilder() {
+            this.code = 0;
+            this.data = "";
+            this.message = "";
+        }
 
         public ResponseBuilder code(int code) {
             this.code = code;

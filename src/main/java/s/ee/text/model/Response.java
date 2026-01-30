@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2026 S.EE Development Team,. Ltd
- *
+ * <p>
  * This source code is licensed under the MIT License,
  * which is located in the LICENSE file in the source tree's root directory.
- *
+ * <p>
  * File: TextResponse.java
  * Author: S.EE Development Team <dev@s.ee>
  * File Created: 2026-01-20 11:33:32
- *
+ * <p>
  * Modified By: S.EE Development Team <dev@s.ee>
  * Last Modified: 2026-01-20 12:01:58
  */
@@ -20,9 +20,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Response for text operations.
  */
 public record Response(
-    @JsonProperty("code") int code,
-    @JsonProperty("data") Data data,
-    @JsonProperty("message") String message
+        @JsonProperty("code") int code,
+        @JsonProperty("data") Data data,
+        @JsonProperty("message") String message
 ) {
 
     public String getShortUrl() {
@@ -30,12 +30,13 @@ public record Response(
     }
 
     public String getSlug() {
-        return data != null ? data.slug() : null;
+        return data != null ? data.customSlug() != null ? data.customSlug() : data.slug() : null;
     }
 
     public record Data(
-        @JsonProperty("custom_slug") String customSlug,
-        @JsonProperty("short_url") String shortUrl,
-        @JsonProperty("slug") String slug
-    ) {}
+            @JsonProperty("custom_slug") String customSlug,
+            @JsonProperty("short_url") String shortUrl,
+            @JsonProperty("slug") String slug
+    ) {
+    }
 }

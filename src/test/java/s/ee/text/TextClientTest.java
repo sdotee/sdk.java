@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2025-2026 S.EE Development Team,. Ltd
- *
+ * <p>
  * This source code is licensed under the MIT License,
  * which is located in the LICENSE file in the source tree's root directory.
- *
+ * <p>
  * File: TextClientTest.java
  * Author: S.EE Development Team <dev@s.ee>
  * File Created: 2026-01-20 11:34:10
- *
+ * <p>
  * Modified By: S.EE Development Team <dev@s.ee>
  * Last Modified: 2026-01-20 12:02:43
  */
@@ -21,7 +21,8 @@ import s.ee.text.model.CreateRequest;
 import s.ee.text.model.DeleteRequest;
 import s.ee.text.model.UpdateRequest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class TextClientTest extends BaseIntegrationTest {
@@ -43,7 +44,7 @@ class TextClientTest extends BaseIntegrationTest {
             return;
         }
 
-        var request = new CreateRequest("Hello Text World", "Test Title");
+        var request = CreateRequest.of("Hello Text World", "Test Title");
         var response = client.create(request);
 
         assertNotNull(response);

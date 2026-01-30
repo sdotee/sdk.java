@@ -16,15 +16,12 @@ public class TagExample {
             return;
         }
 
-        Config config = new Config("https://s.ee/api/v1", apiKey, 30);
-        TagClient client = new TagClient(config);
-
+        TagClient client = new TagClient(Config.builder().apiKey(apiKey).build());
         try {
             // 1. Get available tags
             System.out.println("Fetching available tags...");
             TagResponse tags = client.get();
             System.out.println("Available tags: " + tags.getTags());
-
         } catch (Exception e) {
             e.printStackTrace();
         }
