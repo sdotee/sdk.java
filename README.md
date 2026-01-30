@@ -32,99 +32,14 @@ A lightweight Java SDK for the SEE content sharing service, supporting URL short
 ### Build from Source
 
 ```bash
-git clone https://github.com/yourusername/see-java-sdk.git
+git clone https://github.com/sdotee/sdk.java see-java-sdk -b main
 cd see-java-sdk
 mvn clean package
 ```
 
 ## Quick Start
 
-### URL Shortening
-
-```java
-// Initialize client
-var config = new ShortenConfig("https://api.s.ee/v1", "your-api-key", 30);
-var client = new ShortenClient(config);
-
-// Create shortened URL
-var request = ShortenRequest.of("s.ee", "https://example.com");
-var response = client.create(request);
-System.out.println("Short URL: " + response.data().shortUrl());
-
-// With custom options
-var customRequest = ShortenRequest.of("s.ee", "https://example.com")
-    .withCustomSlug("my-link")
-    .withTitle("My Example Link");
-```
-
-### Domain Management
-
-```java
-var config = new DomainConfig("https://api.s.ee/v1", "your-api-key", 30);
-var client = new DomainClient(config);
-
-var domains = client.get();
-System.out.println("Available domains: " + domains.data());
-```
-
-### Tag Management
-
-```java
-var config = new TagConfig("https://api.s.ee/v1", "your-api-key", 30);
-var client = new TagClient(config);
-
-var tags = client.get();
-System.out.println("Available tags: " + tags.data());
-```
-
-### File Management
-
-```java
-var config = new Config("your-api-key");
-var client = new FileClient(config);
-
-// Upload file
-var file = new File("path/to/image.png");
-var response = client.upload(file);
-System.out.println("File URL: " + response.data().url());
-
-// Delete file
-client.delete(String.valueOf(response.data().fileId()));
-```
-
-### Text Sharing
-
-```java
-var config = new Config("your-api-key");
-var client = new TextClient(config);
-
-// Create text sharing
-var request = new TextCreateRequest("Hello World", "My Title");
-var response = client.create(request);
-System.out.println("Text URL: " + response.data().shortUrl());
-
-// Update text
-var updateRequest = new TextUpdateRequest("New Content", "s.ee", response.data().slug(), "New Title");
-client.update(updateRequest);
-```
-
-## CLI Usage
-
-Build the CLI tool:
-
-```bash
-mvn clean package
-```
-
-Use the CLI:
-
-```bash
-# Shorten a URL
-java -jar target/see-cli.jar shorten --domain s.ee --url https://example.com
-
-# With custom slug
-java -jar target/see-cli.jar shorten --domain s.ee --url https://example.com --slug my-link
-```
+Detailed usage examples can be found in the `src/test/java/s/ee/examples/` directory.
 
 ## Configuration
 
