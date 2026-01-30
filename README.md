@@ -25,7 +25,7 @@ A lightweight Java SDK for the SEE content sharing service, supporting URL short
 <dependency>
     <groupId>s.ee</groupId>
     <artifactId>see-java-sdk</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
