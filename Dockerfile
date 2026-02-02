@@ -23,7 +23,7 @@ FROM amazoncorretto:17-alpine
 # Set metadata
 LABEL maintainer="SEE SDK Team"
 LABEL description="SEE Java SDK CLI - content sharing service command-line tool"
-LABEL version="1.0.0"
+LABEL version="1.1.0"
 
 # Install required packages
 RUN apk add --no-cache \
