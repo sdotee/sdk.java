@@ -6,6 +6,8 @@ import okhttp3.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -47,11 +49,24 @@ public abstract class Client {
     }
 
     protected <R> R postMultipart(String endpoint, File file, Class<R> responseType) throws SeeException {
-        var body = new MultipartBody.Builder()
+        return postMultipart(endpoint, file, Collections.emptyMap(), responseType);
+    }
+
+    protected <R> R postMultipart(String endpoint, File file, Map<String, String> params, Class<R> responseType) throws SeeException {
+        var bodyBuilder = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("file", file.getName(),
-                        RequestBody.create(file, MediaType.parse("application/octet-stream")))
-                .build();
+                        RequestBody.create(file, MediaType.parse("application/octet-stream")));
+
+        if (params != null) {
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                if (entry.getValue() != null) {
+                    bodyBuilder.addFormDataPart(entry.getKey(), entry.getValue());
+                }
+            }
+        }
+
+        var body = bodyBuilder.build();
 
         var request = buildRequest(endpoint)
                 .post(body)

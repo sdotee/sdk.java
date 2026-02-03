@@ -22,6 +22,8 @@ import s.ee.file.model.DeleteResponse;
 import s.ee.file.model.FileResponse;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Client for File operations.
@@ -40,7 +42,23 @@ public class FileClient extends Client {
      * @throws SeeException if the operation fails
      */
     public FileResponse upload(File file) throws SeeException {
-        return postMultipart("/file/upload", file, FileResponse.class);
+        return upload(file, null, null);
+    }
+
+    /**
+     * Uploads a file with options.
+     *
+     * @param file       the file to upload
+     * @param domain     the domain to be used for the short link
+     * @param customSlug preferred custom slug
+     * @return the file response
+     * @throws SeeException if the operation fails
+     */
+    public FileResponse upload(File file, String domain, String customSlug) throws SeeException {
+        Map<String, String> params = new HashMap<>();
+        if (domain != null) params.put("domain", domain);
+        if (customSlug != null) params.put("custom_slug", customSlug);
+        return postMultipart("/file/upload", file, params, FileResponse.class);
     }
 
     /**
