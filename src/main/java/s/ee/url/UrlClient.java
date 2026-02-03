@@ -10,6 +10,7 @@ import s.ee.url.model.*;
  * Client for URL shortening operations.
  */
 public class UrlClient extends Client {
+    public static final int USAGE_NO_LIMIT = -1;
 
     public UrlClient(Config config) {
         super(config);
@@ -48,15 +49,7 @@ public class UrlClient extends Client {
         return put("/shorten", request, s.ee.common.Response.class);
     }
 
-    /**
-     * Get the usage of the short link service.
-     *
-     * @return the usage response
-     * @throws SeeException if the operation fails
-     */
-    public UsageResponse getUsage() throws SeeException {
-        return get("/usage", null, UsageResponse.class);
-    }
+
 
     /**
      * Retrieves available domains.

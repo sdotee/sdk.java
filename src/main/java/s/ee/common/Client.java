@@ -3,6 +3,7 @@ package s.ee.common;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
+import s.ee.url.model.UsageResponse;
 
 import java.io.File;
 import java.io.IOException;
@@ -144,5 +145,14 @@ public abstract class Client {
             throw new SeeException("Failed to execute request or parse response", e);
         }
     }
-}
 
+    /**
+     * Get the usage of the short link service.
+     *
+     * @return the usage response
+     * @throws SeeException if the operation fails
+     */
+    public UsageResponse getUsage() throws SeeException {
+        return get("/usage", null, UsageResponse.class);
+    }
+}

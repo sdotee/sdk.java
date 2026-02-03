@@ -26,6 +26,7 @@ import s.ee.url.model.UpdateRequest;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static s.ee.url.UrlClient.USAGE_NO_LIMIT;
 
 /**
  * Integration tests for the URL shortening service.
@@ -47,6 +48,17 @@ class UrlClientTest extends BaseIntegrationTest {
     static void setUpAll() {
         // Initialize client with configuration from environment/system properties
         shortenClient = new UrlClient(createConfig());
+    }
+
+    @Test
+    @DisplayName("Test usage retrieval")
+    void testUsage() throws SeeException {
+        var usage = shortenClient.getUsage();
+        assertNotNull(usage, "Usage response should not be null");
+        assertEquals(Client.NO_ERROR, usage.code(), "Response code should be NO_ERROR");
+
+        assertEquals(USAGE_NO_LIMIT, usage.data().apiCountMonthLimit(), "Monthly limit should be no limit");
+        assertTrue(usage.data().apiCountDay() >= 0, "Monthly used count should be non-negative");
     }
 
     @Test
