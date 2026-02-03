@@ -16,6 +16,8 @@ package s.ee.text.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+
 /**
  * Request to create text sharing.
  */
@@ -25,8 +27,9 @@ public record CreateRequest(
         @JsonProperty("text_type") String textType,
         @JsonProperty("domain") String domain,
         @JsonProperty("custom_slug") String customSlug,
-        @JsonProperty("expire_at") Integer expireIn,
-        @JsonProperty("password") String password
+        @JsonProperty("expire_at") Long expireAt,
+        @JsonProperty("password") String password,
+        @JsonProperty("tag_ids") List<Integer> tagIds
 ) {
     public static String TEXT_TYPE_PLAIN_TEXT = "plain_text";
     public static String TEXT_TYPE_MARKDOWN = "markdown";
@@ -40,26 +43,30 @@ public record CreateRequest(
      * @return a new CreateRequest instance
      */
     public static CreateRequest of(String content, String title) {
-        return new CreateRequest(content, title, TEXT_TYPE_PLAIN_TEXT, null, null, null, null);
+        return new CreateRequest(content, title, TEXT_TYPE_PLAIN_TEXT, null, null, null, null, null);
     }
 
     public CreateRequest withTextType(String textType) {
-        return new CreateRequest(content, title, textType, domain, customSlug, expireIn, password);
+        return new CreateRequest(content, title, textType, domain, customSlug, expireAt, password, tagIds);
     }
 
     public CreateRequest withDomain(String domain) {
-        return new CreateRequest(content, title, textType, domain, customSlug, expireIn, password);
+        return new CreateRequest(content, title, textType, domain, customSlug, expireAt, password, tagIds);
     }
 
-    public CreateRequest withExpireIn(Integer expireIn) {
-        return new CreateRequest(content, title, textType, domain, customSlug, expireIn, password);
+    public CreateRequest withExpireAt(Long expireAt) {
+        return new CreateRequest(content, title, textType, domain, customSlug, expireAt, password, tagIds);
     }
 
     public CreateRequest withPassword(String password) {
-        return new CreateRequest(content, title, textType, domain, customSlug, expireIn, password);
+        return new CreateRequest(content, title, textType, domain, customSlug, expireAt, password, tagIds);
     }
 
     public CreateRequest withCustomSlug(String customSlug) {
-        return new CreateRequest(content, title, textType, domain, customSlug, expireIn, password);
+        return new CreateRequest(content, title, textType, domain, customSlug, expireAt, password, tagIds);
+    }
+
+    public CreateRequest withTagIds(List<Integer> tagIds) {
+        return new CreateRequest(content, title, textType, domain, customSlug, expireAt, password, tagIds);
     }
 }

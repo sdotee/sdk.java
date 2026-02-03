@@ -4,10 +4,7 @@ import s.ee.common.Client;
 import s.ee.common.Config;
 import s.ee.common.DomainResponse;
 import s.ee.common.SeeException;
-import s.ee.url.model.CreateRequest;
-import s.ee.url.model.DeleteRequest;
-import s.ee.url.model.Response;
-import s.ee.url.model.UpdateRequest;
+import s.ee.url.model.*;
 
 /**
  * Client for URL shortening operations.
@@ -51,6 +48,15 @@ public class UrlClient extends Client {
         return put("/shorten", request, s.ee.common.Response.class);
     }
 
+    /**
+     * Get the usage of the short link service.
+     *
+     * @return the usage response
+     * @throws SeeException if the operation fails
+     */
+    public UsageResponse getUsage() throws SeeException {
+        return get("/usage", null, UsageResponse.class);
+    }
 
     /**
      * Retrieves available domains.
