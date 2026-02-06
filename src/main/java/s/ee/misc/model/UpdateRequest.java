@@ -1,4 +1,4 @@
-package s.ee.url.model;
+package s.ee.misc.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

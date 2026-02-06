@@ -30,10 +30,7 @@ public abstract class Client {
      */
     public Client(Config config) {
         this.config = config;
-        this.httpClient = new OkHttpClient.Builder()
-                .connectTimeout(config.timeout(), TimeUnit.SECONDS)
-                .readTimeout(config.timeout(), TimeUnit.SECONDS)
-                .build();
+        this.httpClient = new OkHttpClient.Builder().connectTimeout(config.timeout(), TimeUnit.SECONDS).readTimeout(config.timeout(), TimeUnit.SECONDS).build();
         this.objectMapper = new ObjectMapper();
     }
 
@@ -54,10 +51,7 @@ public abstract class Client {
     }
 
     protected <R> R postMultipart(String endpoint, File file, Map<String, String> params, Class<R> responseType) throws SeeException {
-        var bodyBuilder = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("file", file.getName(),
-                        RequestBody.create(file, MediaType.parse("application/octet-stream")));
+        var bodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart("file", file.getName(), RequestBody.create(file, MediaType.parse("application/octet-stream")));
 
         if (params != null) {
             for (Map.Entry<String, String> entry : params.entrySet()) {
@@ -69,9 +63,7 @@ public abstract class Client {
 
         var body = bodyBuilder.build();
 
-        var request = buildRequest(endpoint)
-                .post(body)
-                .build();
+        var request = buildRequest(endpoint).post(body).build();
 
         return executeRequest(request, responseType);
     }
@@ -94,9 +86,7 @@ public abstract class Client {
     }
 
     private Request.Builder buildRequest(String endpoint) {
-        return new Request.Builder()
-                .url(getBaseUrl() + endpoint)
-                .addHeader("Authorization", getApiKey());
+        return new Request.Builder().url(getBaseUrl() + endpoint).addHeader("Authorization", getApiKey());
     }
 
     private <T, R> R executeWithBody(String method, String endpoint, T requestBody, Class<R> responseType) throws SeeException {

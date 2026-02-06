@@ -21,7 +21,7 @@ import s.ee.common.Config;
 import s.ee.common.SeeException;
 import s.ee.url.model.CreateRequest;
 import s.ee.url.model.DeleteRequest;
-import s.ee.url.model.UpdateRequest;
+import s.ee.misc.model.UpdateRequest;
 
 import java.util.Date;
 

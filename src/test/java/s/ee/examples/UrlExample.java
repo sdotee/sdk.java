@@ -6,7 +6,7 @@ import s.ee.url.UrlClient;
 import s.ee.url.model.CreateRequest;
 import s.ee.url.model.DeleteRequest;
 import s.ee.url.model.Response;
-import s.ee.url.model.UpdateRequest;
+import s.ee.misc.model.UpdateRequest;
 
 /**
  * Example for URL Shortening operations.

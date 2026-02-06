@@ -4,7 +4,10 @@ import s.ee.common.Client;
 import s.ee.common.Config;
 import s.ee.common.DomainResponse;
 import s.ee.common.SeeException;
-import s.ee.url.model.*;
+import s.ee.url.model.CreateRequest;
+import s.ee.url.model.DeleteRequest;
+import s.ee.url.model.Response;
+import s.ee.misc.model.UpdateRequest;
 
 /**
  * Client for URL shortening operations.
@@ -48,8 +51,6 @@ public class UrlClient extends Client {
     public s.ee.common.Response update(UpdateRequest request) throws SeeException {
         return put("/shorten", request, s.ee.common.Response.class);
     }
-
-
 
     /**
      * Retrieves available domains.
