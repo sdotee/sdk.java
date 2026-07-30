@@ -17,7 +17,7 @@ public record TagResponse(
 
     public record Data(@JsonProperty("tags") Tag[] tags) {
         public record Tag(
-                @JsonProperty("id") String id,
+            @JsonProperty("id") long id,
                 @JsonProperty("name") String name
         ) {
         }

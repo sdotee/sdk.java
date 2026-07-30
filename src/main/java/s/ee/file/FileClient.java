@@ -20,6 +20,11 @@ import s.ee.common.SeeException;
 import s.ee.common.DomainResponse;
 import s.ee.file.model.DeleteResponse;
 import s.ee.file.model.FileResponse;
+import s.ee.file.model.HistoryResponse;
+import s.ee.file.model.PrivateDownloadUrlResponse;
+import s.ee.file.model.LargeFileModels;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 import java.io.File;
 import java.util.HashMap;
@@ -69,7 +74,7 @@ public class FileClient extends Client {
      * @throws SeeException if the operation fails
      */
     public DeleteResponse delete(String hash) throws SeeException {
-        return get("/file/delete/" + hash, null, DeleteResponse.class);
+        return get("/file/delete/" + pathSegment(hash), DeleteResponse.class);
     }
 
     /**
@@ -79,6 +84,68 @@ public class FileClient extends Client {
      * @throws SeeException if the operation fails
      */
     public DomainResponse getDomains() throws SeeException {
-        return get("/file/domains", null, DomainResponse.class);
+        return get("/file/domains", DomainResponse.class);
+    }
+
+    public HistoryResponse getHistory(Integer page) throws SeeException {
+        return get("/files", Map.of("page", page == null ? 1 : page), HistoryResponse.class);
+    }
+
+    public PrivateDownloadUrlResponse getPrivateDownloadUrl(long fileId) throws SeeException {
+        return get("/file/private/download-url", Map.of("file_id", fileId), PrivateDownloadUrlResponse.class);
+    }
+
+    public LargeFileModels.CreateResponse createLargeFileUpload(LargeFileModels.CreateRequest request)
+        throws SeeException {
+        return post("/file/large-file/create", request, LargeFileModels.CreateResponse.class);
+    }
+
+    public LargeFileModels.ProgressResponse getLargeFileUploadProgress(String uploadId) throws SeeException {
+        return get("/file/large-file/progress", Map.of("upload_id", uploadId),
+            LargeFileModels.ProgressResponse.class);
+    }
+
+    public long getLargeFileUploadOffset(String uploadId) throws SeeException {
+        var headers = executeForHeaders("HEAD", tusEndpoint(uploadId), null, tusHeaders());
+        return parseUploadOffset(headers.get("Upload-Offset"));
+    }
+
+    public long uploadLargeFileChunk(String uploadId, long offset, byte[] chunk) throws SeeException {
+        var headers = new HashMap<>(tusHeaders());
+        headers.put("Upload-Offset", Long.toString(offset));
+        headers.put("Content-Type", "application/offset+octet-stream");
+        var body = RequestBody.create(chunk, MediaType.get("application/offset+octet-stream"));
+        var responseHeaders = executeForHeaders("PATCH", tusEndpoint(uploadId), body, headers);
+        return parseUploadOffset(responseHeaders.get("Upload-Offset"));
+    }
+
+    public void deleteLargeFileUpload(String uploadId) throws SeeException {
+        executeForHeaders("DELETE", tusEndpoint(uploadId), null, tusHeaders());
+    }
+
+    public s.ee.common.Response cancelLargeFileUpload(String uploadId) throws SeeException {
+        return delete("/file/large-file/cancel", new LargeFileModels.UploadRequest(uploadId),
+            s.ee.common.Response.class);
+    }
+
+    public LargeFileModels.CompleteResponse completeLargeFileUpload(String uploadId) throws SeeException {
+        return post("/file/large-file/complete", new LargeFileModels.UploadRequest(uploadId),
+            LargeFileModels.CompleteResponse.class);
+    }
+
+    private String tusEndpoint(String uploadId) {
+        return "/file/large-file-tus/" + pathSegment(uploadId);
+    }
+
+    private Map<String, String> tusHeaders() {
+        return Map.of("Tus-Resumable", "1.0.0");
+    }
+
+    private long parseUploadOffset(String value) throws SeeException {
+        try {
+            return Long.parseLong(value);
+        } catch (NumberFormatException e) {
+            throw new SeeException("Missing or invalid Upload-Offset response header", e);
+        }
     }
 }

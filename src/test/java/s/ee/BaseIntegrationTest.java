@@ -14,6 +14,7 @@
 
 package s.ee;
 
+import org.junit.jupiter.api.Assumptions;
 import s.ee.common.Config;
 
 /**
@@ -52,9 +53,8 @@ public abstract class BaseIntegrationTest {
      */
     protected static String getApiKey() {
         String apiKey = getConfigValue("SEE_API_KEY", "");
-        if (apiKey == null || apiKey.isBlank()) {
-            throw new IllegalStateException("API key not configured. Set SEE_API_KEY environment variable or system property.");
-        }
+        Assumptions.assumeTrue(apiKey != null && !apiKey.isBlank(),
+            "Set SEE_API_KEY to run live integration tests");
         return apiKey;
     }
 

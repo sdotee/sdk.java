@@ -6,8 +6,14 @@ import s.ee.common.DomainResponse;
 import s.ee.common.SeeException;
 import s.ee.url.model.CreateRequest;
 import s.ee.url.model.DeleteRequest;
+import s.ee.url.model.HistoryResponse;
+import s.ee.url.model.VisitStatResponse;
 import s.ee.url.model.Response;
 import s.ee.misc.model.UpdateRequest;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.List;
 
 /**
  * Client for URL shortening operations.
@@ -59,6 +65,33 @@ public class UrlClient extends Client {
      * @throws SeeException if the operation fails
      */
     public DomainResponse getDomains() throws SeeException {
-        return get("/domains", null, DomainResponse.class);
+        return get("/domains", DomainResponse.class);
+    }
+
+    public HistoryResponse getHistory(Integer page) throws SeeException {
+        return get("/links", Map.of("page", page == null ? 1 : page), HistoryResponse.class);
+    }
+
+    public VisitStatResponse getVisitStatistics(String domain, String slug, String period) throws SeeException {
+        Map<String, Object> query = new LinkedHashMap<>();
+        query.put("domain", domain);
+        query.put("slug", slug);
+        query.put("period", period);
+        return get("/link/visit-stat", query, VisitStatResponse.class);
+    }
+
+    public Response createSimple(String targetUrl, String domain, String customSlug, String title,
+                                 List<Integer> tagIds, String password, Long expireAt) throws SeeException {
+        Map<String, Object> query = new LinkedHashMap<>();
+        query.put("signature", getApiKey());
+        query.put("url", targetUrl);
+        query.put("domain", domain);
+        query.put("custom_slug", customSlug);
+        query.put("title", title);
+        query.put("tag_ids", tagIds == null ? null : tagIds.stream().map(String::valueOf).reduce((a, b) -> a + "," + b).orElse(""));
+        query.put("password", password);
+        query.put("expire_at", expireAt);
+        query.put("json", true);
+        return get("/shorten", query, Response.class);
     }
 }

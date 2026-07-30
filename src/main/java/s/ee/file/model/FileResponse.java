@@ -39,10 +39,12 @@ public record FileResponse(
         @JsonProperty("filename") String filename,
         @JsonProperty("hash") String hash,
         @JsonProperty("height") int height,
+        @JsonProperty("mime_type") String mimeType,
         @JsonProperty("page") String page,
         @JsonProperty("path") String path,
         @JsonProperty("size") long size,
         @JsonProperty("storename") String storename,
+        @JsonProperty("thumb_url") String thumbUrl,
         @JsonProperty("upload_status") int uploadStatus,
         @JsonProperty("url") String url,
         @JsonProperty("width") int width

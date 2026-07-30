@@ -7,6 +7,8 @@ import s.ee.common.DomainResponse;
 import s.ee.text.model.*;
 import s.ee.text.model.DeleteRequest;
 
+import java.util.Map;
+
 /**
  * Client for Text operations.
  */
@@ -56,6 +58,10 @@ public class TextClient extends Client {
      * @throws SeeException if the operation fails
      */
     public DomainResponse getDomains() throws SeeException {
-        return get("/text/domains", null, DomainResponse.class);
+        return get("/text/domains", DomainResponse.class);
+    }
+
+    public HistoryResponse getHistory(Integer page) throws SeeException {
+        return get("/texts", Map.of("page", page == null ? 1 : page), HistoryResponse.class);
     }
 }

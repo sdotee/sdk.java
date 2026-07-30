@@ -1,12 +1,15 @@
 package s.ee.common;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
 import s.ee.url.model.UsageResponse;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -31,7 +34,8 @@ public abstract class Client {
     public Client(Config config) {
         this.config = config;
         this.httpClient = new OkHttpClient.Builder().connectTimeout(config.timeout(), TimeUnit.SECONDS).readTimeout(config.timeout(), TimeUnit.SECONDS).build();
-        this.objectMapper = new ObjectMapper();
+        this.objectMapper = new ObjectMapper()
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     public String getBaseUrl() {
@@ -40,6 +44,10 @@ public abstract class Client {
 
     public String getApiKey() {
         return config.apiKey();
+    }
+
+    protected static String pathSegment(String value) {
+        return URLEncoder.encode(value, StandardCharsets.UTF_8).replace("+", "%20");
     }
 
     protected <T, R> R post(String endpoint, T requestBody, Class<R> responseType) throws SeeException {
@@ -73,7 +81,25 @@ public abstract class Client {
     }
 
     protected <T, R> R get(String endpoint, T requestBody, Class<R> responseType) throws SeeException {
-        return executeWithBody("GET", endpoint, requestBody, responseType);
+        return get(endpoint, responseType);
+    }
+
+    protected <R> R get(String endpoint, Class<R> responseType) throws SeeException {
+        var request = buildRequest(endpoint).get().build();
+        return executeRequest(request, responseType);
+    }
+
+    protected <R> R get(String endpoint, Map<String, ?> queryParams, Class<R> responseType) throws SeeException {
+        var urlBuilder = HttpUrl.get(getBaseUrl() + endpoint).newBuilder();
+        if (queryParams != null) {
+            queryParams.forEach((name, value) -> {
+                if (value != null) {
+                    urlBuilder.addQueryParameter(name, String.valueOf(value));
+                }
+            });
+        }
+        var request = new Request.Builder().url(urlBuilder.build()).addHeader("Authorization", getApiKey()).get().build();
+        return executeRequest(request, responseType);
     }
 
     protected <R> R delete(String endpoint, Class<R> responseType) throws SeeException {
@@ -83,6 +109,22 @@ public abstract class Client {
 
     protected <T, R> R delete(String endpoint, T requestBody, Class<R> responseType) throws SeeException {
         return executeWithBody("DELETE", endpoint, requestBody, responseType);
+    }
+
+    protected Headers executeForHeaders(String method, String endpoint, RequestBody body,
+                                        Map<String, String> headers) throws SeeException {
+        var builder = buildRequest(endpoint);
+        if (headers != null) {
+            headers.forEach(builder::addHeader);
+        }
+        try (var response = httpClient.newCall(builder.method(method, body).build()).execute()) {
+            if (!response.isSuccessful()) {
+                throw createHttpException(response);
+            }
+            return response.headers();
+        } catch (IOException e) {
+            throw new SeeException("Failed to execute %s request".formatted(method), e);
+        }
     }
 
     private Request.Builder buildRequest(String endpoint) {
@@ -112,10 +154,11 @@ public abstract class Client {
     private <R> R executeRequest(Request request, Class<R> responseType) throws SeeException {
         try (var response = httpClient.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                var responseBody = response.body();
-                var errorBody = responseBody != null ? responseBody.string() : "No error body";
-                var errorResponse = objectMapper.readValue(errorBody, Response.class);
-                throw new SeeException(errorResponse);
+                throw createHttpException(response);
+            }
+
+            if (responseType == Void.class) {
+                return null;
             }
 
             var responseBody = response.body();
@@ -136,6 +179,17 @@ public abstract class Client {
         }
     }
 
+    private SeeException createHttpException(okhttp3.Response response) throws IOException {
+        var responseBody = response.body();
+        var errorBody = responseBody != null ? responseBody.string() : "";
+        try {
+            return new SeeException(objectMapper.readValue(errorBody, Response.class));
+        } catch (IOException ignored) {
+            return new SeeException("HTTP %d: %s".formatted(response.code(),
+                errorBody.isBlank() ? response.message() : errorBody));
+        }
+    }
+
     /**
      * Get the usage of the short link service.
      *
@@ -143,6 +197,6 @@ public abstract class Client {
      * @throws SeeException if the operation fails
      */
     public UsageResponse getUsage() throws SeeException {
-        return get("/usage", null, UsageResponse.class);
+        return get("/usage", UsageResponse.class);
     }
 }
