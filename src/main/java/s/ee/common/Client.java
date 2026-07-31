@@ -3,14 +3,19 @@ package s.ee.common;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import okhttp3.*;
+import okhttp3.Headers;
+import okhttp3.HttpUrl;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 import s.ee.url.model.UsageResponse;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -55,11 +60,12 @@ public abstract class Client {
     }
 
     protected <R> R postMultipart(String endpoint, File file, Class<R> responseType) throws SeeException {
-        return postMultipart(endpoint, file, Collections.emptyMap(), responseType);
+        return postMultipart(endpoint, file, Map.of(), responseType);
     }
 
     protected <R> R postMultipart(String endpoint, File file, Map<String, String> params, Class<R> responseType) throws SeeException {
-        var bodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart("file", file.getName(), RequestBody.create(file, MediaType.parse("application/octet-stream")));
+        var bodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM)
+            .addFormDataPart("file", file.getName(), RequestBody.create(file, MediaType.get("application/octet-stream")));
 
         if (params != null) {
             for (Map.Entry<String, String> entry : params.entrySet()) {
@@ -80,13 +86,19 @@ public abstract class Client {
         return executeWithBody("PUT", endpoint, requestBody, responseType);
     }
 
-    protected <T, R> R get(String endpoint, T requestBody, Class<R> responseType) throws SeeException {
-        return get(endpoint, responseType);
-    }
-
     protected <R> R get(String endpoint, Class<R> responseType) throws SeeException {
         var request = buildRequest(endpoint).get().build();
         return executeRequest(request, responseType);
+    }
+
+    protected static int pageOrDefault(Integer page) {
+        if (page == null) {
+            return 1;
+        }
+        if (page < 1) {
+            throw new IllegalArgumentException("Page must be greater than zero");
+        }
+        return page;
     }
 
     protected <R> R get(String endpoint, Map<String, ?> queryParams, Class<R> responseType) throws SeeException {
@@ -167,7 +179,7 @@ public abstract class Client {
             }
 
             var body = responseBody.string();
-            if (body == null || body.isEmpty()) {
+            if (body.isEmpty()) {
                 throw new SeeException("Response body is empty");
             }
 

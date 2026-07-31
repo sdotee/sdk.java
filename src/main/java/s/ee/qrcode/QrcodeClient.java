@@ -22,6 +22,6 @@ public class QrcodeClient extends Client {
     }
 
     public QrcodeModels.HistoryResponse getHistory(Integer page) throws SeeException {
-        return get("/qrcodes", Map.of("page", page == null ? 1 : page), QrcodeModels.HistoryResponse.class);
+        return get("/qrcodes", Map.of("page", pageOrDefault(page)), QrcodeModels.HistoryResponse.class);
     }
 }

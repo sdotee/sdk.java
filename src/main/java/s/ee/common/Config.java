@@ -14,6 +14,9 @@
 
 package s.ee.common;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 /**
  * Configuration for SEE API client.
  *
@@ -25,12 +28,41 @@ public record Config(String baseUrl, String apiKey, int timeout) {
     public static final String DEFAULT_BASE_URL = "https://s.ee/api/v1";
     public static final int DEFAULT_TIMEOUT_SECONDS = 5;
 
+    public Config {
+        if (baseUrl == null || baseUrl.isBlank()) {
+            throw new IllegalArgumentException("Base URL must not be blank");
+        }
+        if (apiKey == null || apiKey.isBlank()) {
+            throw new IllegalArgumentException("API key must not be blank");
+        }
+        if (timeout <= 0) {
+            throw new IllegalArgumentException("Timeout must be greater than zero");
+        }
+
+        baseUrl = normalizeBaseUrl(baseUrl);
+    }
+
     public Config(String apiKey) {
         this(DEFAULT_BASE_URL, apiKey, DEFAULT_TIMEOUT_SECONDS);
     }
 
     public static ConfigBuilder builder() {
         return new ConfigBuilder();
+    }
+
+    private static String normalizeBaseUrl(String value) {
+        var normalized = value.strip().replaceFirst("/+$", "");
+        try {
+            var uri = new URI(normalized);
+            var scheme = uri.getScheme();
+            if (uri.getHost() == null || !("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme))
+                || uri.getQuery() != null || uri.getFragment() != null) {
+                throw new IllegalArgumentException("Base URL must be an absolute HTTP(S) URL without a query or fragment");
+            }
+            return normalized;
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException("Base URL is invalid", e);
+        }
     }
 
     public static class ConfigBuilder {

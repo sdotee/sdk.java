@@ -26,6 +26,6 @@ public class BioClient extends Client {
     }
 
     public BioModels.HistoryResponse getHistory(Integer page) throws SeeException {
-        return get("/bios", Map.of("page", page == null ? 1 : page), BioModels.HistoryResponse.class);
+        return get("/bios", Map.of("page", pageOrDefault(page)), BioModels.HistoryResponse.class);
     }
 }

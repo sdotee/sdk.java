@@ -22,10 +22,10 @@ public class TagClient extends Client {
      * @throws SeeException if the operation fails
      */
     public TagResponse get() throws SeeException {
-        return get("/tags", null, TagResponse.class);
+        return get("/tags", TagResponse.class);
     }
 
     public DomainResponse getDomains() throws SeeException {
-        return get("/tags/domains", null, DomainResponse.class);
+        return get("/tags/domains", DomainResponse.class);
     }
 }

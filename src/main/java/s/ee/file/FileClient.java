@@ -88,7 +88,7 @@ public class FileClient extends Client {
     }
 
     public HistoryResponse getHistory(Integer page) throws SeeException {
-        return get("/files", Map.of("page", page == null ? 1 : page), HistoryResponse.class);
+        return get("/files", Map.of("page", pageOrDefault(page)), HistoryResponse.class);
     }
 
     public PrivateDownloadUrlResponse getPrivateDownloadUrl(long fileId) throws SeeException {
