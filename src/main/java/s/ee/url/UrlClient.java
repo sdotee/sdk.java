@@ -12,8 +12,9 @@ import s.ee.url.model.Response;
 import s.ee.misc.model.UpdateRequest;
 
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Client for URL shortening operations.
@@ -69,7 +70,7 @@ public class UrlClient extends Client {
     }
 
     public HistoryResponse getHistory(Integer page) throws SeeException {
-        return get("/links", Map.of("page", page == null ? 1 : page), HistoryResponse.class);
+        return get("/links", Map.of("page", pageOrDefault(page)), HistoryResponse.class);
     }
 
     public VisitStatResponse getVisitStatistics(String domain, String slug, String period) throws SeeException {
@@ -88,7 +89,8 @@ public class UrlClient extends Client {
         query.put("domain", domain);
         query.put("custom_slug", customSlug);
         query.put("title", title);
-        query.put("tag_ids", tagIds == null ? null : tagIds.stream().map(String::valueOf).reduce((a, b) -> a + "," + b).orElse(""));
+        query.put("tag_ids", tagIds == null ? null
+            : tagIds.stream().map(String::valueOf).collect(Collectors.joining(",")));
         query.put("password", password);
         query.put("expire_at", expireAt);
         query.put("json", true);

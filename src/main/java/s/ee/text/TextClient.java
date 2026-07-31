@@ -2,10 +2,13 @@ package s.ee.text;
 
 import s.ee.common.Client;
 import s.ee.common.Config;
-import s.ee.common.SeeException;
 import s.ee.common.DomainResponse;
-import s.ee.text.model.*;
+import s.ee.common.SeeException;
+import s.ee.text.model.CreateRequest;
 import s.ee.text.model.DeleteRequest;
+import s.ee.text.model.HistoryResponse;
+import s.ee.text.model.Response;
+import s.ee.text.model.UpdateRequest;
 
 import java.util.Map;
 
@@ -62,6 +65,6 @@ public class TextClient extends Client {
     }
 
     public HistoryResponse getHistory(Integer page) throws SeeException {
-        return get("/texts", Map.of("page", page == null ? 1 : page), HistoryResponse.class);
+        return get("/texts", Map.of("page", pageOrDefault(page)), HistoryResponse.class);
     }
 }

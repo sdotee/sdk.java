@@ -21,20 +21,15 @@ import s.ee.common.SeeException;
  * Exception thrown when URL shortening operations fail.
  */
 public class UrlException extends SeeException {
-    private final Response response;
-
     public UrlException(String message) {
         super(message);
-        this.response = Response.builder().message(message).build();
     }
 
     public UrlException(Response errorResponse) {
-        super(errorResponse.toString());
-        this.response = errorResponse;
+        super(errorResponse);
     }
 
     public UrlException(String message, Throwable cause) {
         super(message, cause);
-        this.response = Response.builder().message(message).build();
     }
 }
