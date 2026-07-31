@@ -36,3 +36,4 @@ build/
 
 ### Environment Variables ###
 .env
+settings.xml

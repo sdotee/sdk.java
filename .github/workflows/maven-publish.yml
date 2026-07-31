@@ -28,9 +28,10 @@ jobs:
           server-id: github # references the server id in pom.xml
 
       - name: Build with Maven
-        run: mvn -B package --file pom.xml
+        run: mvn -B verify --file pom.xml
 
       - name: Publish to GitHub Packages
-        run: mvn deploy -P release -Dgpg.skip
+        if: github.event_name == 'release' || startsWith(github.ref, 'refs/tags/')
+        run: mvn -B deploy -DskipTests -Dgpg.skip --file pom.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

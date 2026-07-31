@@ -12,8 +12,7 @@ A lightweight Java SDK for the SEE content sharing service, supporting URL short
 - **Token Validation**: Validate API tokens
 - **Domain Management**: List available domains
 - **Tag Management**: Retrieve and manage tags
-- **CLI Tool**: Command-line interface for quick operations
-- **Modern Java**: Built with Java 17 and optimized dependencies
+- **Modern Java**: Java 17 baseline with records, immutable collections, and switch expressions
 
 ## Requirements
 
@@ -28,7 +27,7 @@ A lightweight Java SDK for the SEE content sharing service, supporting URL short
 <dependency>
     <groupId>dev.s.ee</groupId>
     <artifactId>see-java-sdk</artifactId>
-    <version>1.1.2</version>
+    <version>1.3.0</version>
 </dependency>
 ```
 
@@ -74,10 +73,14 @@ All clients accept a configuration object with:
 - `apiKey`: Your API authentication key
 - `timeout`: Request timeout in seconds (default: 5); use a larger value for large uploads
 
+Configuration is validated when constructed. The API key and base URL must not
+be blank, the base URL must be an absolute HTTP(S) URL without a query or
+fragment, and the timeout must be greater than zero.
+
 ## Testing
 
 ```bash
-mvn test
+mvn clean verify
 ```
 
 Contract tests use a local mock server. Live integration tests are skipped unless
